@@ -11,6 +11,9 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
+  if (b == 0) {
+    return NaN;
+  }
   return a / b;
 }
 
@@ -52,7 +55,7 @@ function defaultDisplay() {
 // clears the display after the operator is clicked for readability
 function display(numberClick) {
   if (clearDisplay) {
-    clear();
+    clear();  
     clearDisplay = false;
   }
   if (numCount < displayLimit) {
@@ -90,6 +93,10 @@ function getOperator(operatorClick) {
 // so that the next one can be entered,
 // while remembering previous calculations
 function store(operatorClick) {
+  if (firstNumber === NaN) {
+    clearAll();
+  }
+  
   // Second number isn't entered, update the operator
   if (clearDisplay) {
     getOperator(operatorClick);
