@@ -24,9 +24,9 @@ function operate(first, second, operator) {
       return add(first, second);
     case "-":
       return subtract(first, second);
-    case "*":
+    case "x":
       return multiply(first, second);
-    case "/":
+    case "÷":
       return divide(first, second);
   }
 }
@@ -39,11 +39,45 @@ numbers.forEach((num) => {num.addEventListener('click', display)});
 // Display character limit
 let numCount = 0;
 const displayLimit = 11;
+clearDisplay = false;
 
+// Allows user to input numbers,
+// clears the display after the operator is clicked for readability
 function display(numberClick) {
+  if (clearDisplay) {
+    clear();
+    clearDisplay = false;
+  }
   if (numCount < displayLimit) {
     displayField.textContent += numberClick.target.textContent;
     ++numCount;
   }
+}
+
+function clear() {
+  displayField.textContent = "";
+  numCount = 0;
+}
+
+const operators = document.querySelectorAll(".operator")
+
+operators.forEach((op) => {op.addEventListener('click', store)});
+
+// Store the first number when clicking the operator,
+// so that the next number can be entered
+function store(operatorClick) {
+  firstNumber = Number(displayField.textContent);
+  operator = operatorClick.target.textContent;
+  clearDisplay = true;
+}
+
+const equals = document.querySelector(".equals");
+
+equals.addEventListener("click", update);
+
+// Update the result of calculation
+function update() {
+  secondNumber = Number(displayField.textContent);
+  displayField.textContent = operate(firstNumber, secondNumber, operator);
 }
 
