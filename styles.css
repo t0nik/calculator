@@ -1,0 +1,121 @@
+@import url('https://fonts.cdnfonts.com/css/digital-7-mono');
+
+.display, button{
+  box-shadow: 2px 2px 4px black;
+}
+
+.case {
+  box-shadow: 3px 3px 6px black;
+}
+
+body {
+  font-family: 'Digital-7', 'Courier New', Courier, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #1e1e1e;
+  color: white;
+  height: 100vh;
+}
+
+.case {
+  display: flex;
+  flex-direction: column;
+  gap: 42px;
+  padding: 32px 32px 36px;
+  border: 6px outset white;
+  width: 288px;
+  background-color: #303030;
+  border-radius: 0px 0px 8px 15%;
+}
+
+.display {
+  height: 52px;
+  padding: 0px 4px;
+  margin: 0px 8px;
+  border: 4px solid white;
+  font-size: 44px;
+  text-align: right;
+  background-color: #afb295;
+  color: black;
+  text-shadow: #4d4d4d 2px 2px 1px;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 16px;
+}
+
+.buttons .wide {
+  flex: 2 1 auto;
+}
+
+.row {
+  display: flex;
+  width: 280px;
+}
+
+button {
+  flex: 0 1 auto;
+  border: 2px solid white;
+  width: 48px;
+  height: 48px;
+  margin: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  border-radius: 4px;
+  /* background-color: #007acc; */
+}
+
+.delete, .clear {
+  border-color: #f48225;
+  background-color: #f48225;
+  color: white;
+}
+
+.delete:hover, .clear:hover {
+  background-color: #f69b51;
+}
+
+.delete:active, .clear:active {
+  background-color: #fac192
+}
+
+.operator {
+  background-color: #908aff;
+  border-color: #908aff;
+}
+
+.operator:hover {
+  background-color: #736ecc;
+}
+
+.operator:active {
+  background-color: #565399;
+}
+
+.equals, .special {
+  background-color: #00c39d;
+  border-color: #00c39d;
+}
+
+.equals:hover, .special:hover {
+  background-color: #009c7e;  
+}
+
+.equals:active, .special:active {
+  background-color: #00755e;
+}
+
+.display.hacker {
+  color: #4AF626;
+  background-color: black;
+  text-shadow: none;
+}
