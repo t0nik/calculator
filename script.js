@@ -34,12 +34,6 @@ function operate(first, second, operator) {
 const numbers = document.querySelectorAll(".number");
 const displayField = document.querySelector(".display");
 
-defaultDisplay();
-
-function defaultDisplay() {
-  displayField.textContent = firstNumber;
-}
-
 numbers.forEach((num) => {num.addEventListener('click', display)});
 
 // Display character limit
@@ -47,10 +41,17 @@ let numCount = 0;
 const displayLimit = 11;
 clearDisplay = false;
 
+defaultDisplay();
+
+function defaultDisplay() {
+  displayField.textContent = firstNumber;
+  clearDisplay = true;
+}
+
 // Allows user to input numbers,
 // clears the display after the operator is clicked for readability
 function display(numberClick) {
-  if (clearDisplay || !firstNumber) {
+  if (clearDisplay) {
     clear();
     clearDisplay = false;
   }
@@ -110,7 +111,9 @@ const equals = document.querySelector(".equals");
 
 equals.addEventListener("click", update);
 
-let precision = 3;
+const precision = "1e5";
+const precisionVal = Number(precision.toString().slice(-1));
+const scientificNotationEndChars = 4;
 
 // The result of calculation becomes the first number,
 // in order to calculate the result while clicking the operators
@@ -121,8 +124,10 @@ function update() {
 
   secondNumber = Number(displayField.textContent);
   firstNumber = format(operate(firstNumber, secondNumber, operator));
-  if (firstNumber > Number("1e" + displayLimit)) {
-    displayField.textContent = firstNumber.toExponential(4);
+  // Limit number to fit to display
+  if (firstNumber > Number("1e" + (displayLimit - precisionVal))) {
+    displayField.textContent = 
+      firstNumber.toExponential(displayLimit - scientificNotationEndChars);
   } else {
     displayField.textContent = firstNumber;
   }
@@ -132,7 +137,8 @@ function update() {
 
 // TODO: Decimals, specific number of digits
 function format(number) {
-  return Math.round(number * 1e3) / 1e3;
+  let epsilon = Number(precision);
+  return Math.round(number * epsilon) / epsilon;
 }
 
 // Bugs:
