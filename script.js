@@ -30,3 +30,20 @@ function operate(first, second, operator) {
       return divide(first, second);
   }
 }
+
+const numbers = document.querySelectorAll(".number");
+const displayField = document.querySelector(".display");
+
+numbers.forEach((num) => {num.addEventListener('click', display)});
+
+// Display character limit
+let numCount = 0;
+const displayLimit = 11;
+
+function display(numberClick) {
+  if (numCount < displayLimit) {
+    displayField.textContent += numberClick.target.textContent;
+    ++numCount;
+  }
+}
+
