@@ -16,7 +16,7 @@ function divide(a, b) {
 
 let firstNumber = 0;
 let secondNumber = 0;
-let operator = 0;
+let operator = "";
 
 function operate(first, second, operator) {
   switch (operator) {
@@ -54,20 +54,47 @@ function display(numberClick) {
   }
 }
 
+const clearField = document.querySelector(".clear");
+clearField.addEventListener('click', clearAll);
+
 function clear() {
   displayField.textContent = "";
   numCount = 0;
+}
+
+function clearAll() {
+  clear();
+  firstNumber = 0;
+  operator = "";
+  secondNumber = 0;
 }
 
 const operators = document.querySelectorAll(".operator")
 
 operators.forEach((op) => {op.addEventListener('click', store)});
 
-// Store the first number when clicking the operator,
-// so that the next number can be entered
-function store(operatorClick) {
-  firstNumber = Number(displayField.textContent);
+function getOperator(operatorClick) {
   operator = operatorClick.target.textContent;
+}
+
+// Storing a number and clearing the display,
+// so that the next one can be entered,
+// while remembering previous calculations
+function store(operatorClick) {
+  // Second number isn't entered, update the operator
+  if (clearDisplay) {
+    getOperator(operatorClick);
+    return;
+  }
+  // If previous result was calculated update until cleared.
+  if (firstNumber) {
+    update();
+  } else {
+    firstNumber = Number(displayField.textContent);
+  }
+
+  // Store the operator for the next update
+  getOperator(operatorClick);
   clearDisplay = true;
 }
 
@@ -75,9 +102,25 @@ const equals = document.querySelector(".equals");
 
 equals.addEventListener("click", update);
 
-// Update the result of calculation
+// The result of calculation becomes the first number,
+// in order to calculate the result while clicking the operators
 function update() {
+  if (clearDisplay) {
+    return;
+  }
+
   secondNumber = Number(displayField.textContent);
-  displayField.textContent = operate(firstNumber, secondNumber, operator);
+  firstNumber = format(operate(firstNumber, secondNumber, operator));
+  displayField.textContent = firstNumber;
+  clearDisplay = true;
 }
 
+// TODO: Decimals, specific number of digits
+function format(number) {
+  return number;
+}
+
+// Bugs:
+// equal operator spamming ex. 2x2=4=16=64 and so on
+// should be: 2x2=4=8=16=32
+// Fixed with clearDisplay return statement;
