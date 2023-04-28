@@ -162,7 +162,12 @@ function displayDecimal() {
   if (displayField.textContent.includes(".")) {
     return;
   }
-
+  if (firstNumber && clearDisplay) {
+    return;
+  }
+  if (!firstNumber && clearDisplay) {
+    clearDisplay = false;
+  }
   if (numCount < displayLimit) {
     displayField.textContent += ".";
   }
