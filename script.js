@@ -184,6 +184,15 @@ function displaySign() {
   } else {
     displayField.textContent = "-" + displayField.textContent;
   }
+
+  // Change the sign of the result
+  // When operator is pressed treat negation as the second number 
+  // (this functionality is the same as the ms windows calculator)
+  if (!operator) {
+    firstNumber = -firstNumber;
+  } else {
+    clearDisplay = false;
+  }
 }
 
 const del = document.querySelector(".delete");
@@ -206,3 +215,5 @@ function deleteCharDisplay() {
   displayField.textContent = displayField.textContent.slice(0,-1);
   numCount--;
 }
+
+// Left to add: Keyboard support
