@@ -101,8 +101,8 @@ function store(operatorClick) {
     getOperator(operatorClick);
     return;
   }
-  // If previous result was calculated update until cleared.
-  if (firstNumber) {
+  // If previous values were stored update until cleared.
+  if (firstNumber && operator) {
     update();
   } else {
     firstNumber = Number(displayField.textContent);
@@ -124,12 +124,13 @@ const scientificNotationEndChars = 4;
 // The result of calculation becomes the first number,
 // in order to calculate the result while clicking the operators
 function update() {
-  if (clearDisplay || !firstNumber) {
+  if (clearDisplay || !firstNumber || !operator) {
     return;
   }
 
   secondNumber = Number(displayField.textContent);
   firstNumber = format(operate(firstNumber, secondNumber, operator));
+  
   // Limit number to fit to display
   if (firstNumber > Number("1e" + (displayLimit - precisionVal))) {
     displayField.textContent = 
@@ -141,14 +142,16 @@ function update() {
   if (isNaN(firstNumber)) {
     displayField.textContent = "Division by 0";
   }
+  operator = "";
   clearDisplay = true;
 }
 
-// TODO: Decimals, specific number of digits
+// Rounds result in order not to overflow the display
 function format(number) {
   let epsilon = Number(precision);
   return Math.round(number * epsilon) / epsilon;
 }
+
 
 // Bugs:
 // equal operator spamming ex. 2x2=4=16=64 and so on
