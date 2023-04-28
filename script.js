@@ -54,6 +54,9 @@ function defaultDisplay() {
 // Allows user to input numbers,
 // clears the display after the operator is clicked for readability
 function display(numberClick) {
+  if (isNaN(firstNumber)) {
+    return;
+  }
   if (clearDisplay) {
     clear();  
     clearDisplay = false;
@@ -93,10 +96,6 @@ function getOperator(operatorClick) {
 // so that the next one can be entered,
 // while remembering previous calculations
 function store(operatorClick) {
-  if (firstNumber === NaN) {
-    clearAll();
-  }
-  
   // Second number isn't entered, update the operator
   if (clearDisplay) {
     getOperator(operatorClick);
@@ -139,7 +138,6 @@ function update() {
     displayField.textContent = firstNumber;
   }
   clearDisplay = true;
-
 }
 
 // TODO: Decimals, specific number of digits
