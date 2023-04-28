@@ -172,6 +172,7 @@ const sign = document.querySelector(".sign");
 
 sign.addEventListener('click', displaySign)
 
+// Negates the number
 function displaySign() {
   if (displayField.textContent.includes("-")) {
     displayField.textContent = displayField.textContent.slice(1);
@@ -184,6 +185,8 @@ const del = document.querySelector(".delete");
 
 del.addEventListener('click', deleteCharDisplay)
 
+// Removes numbers only when inputted by user and
+// allowing to remove numbers before clicking the operators
 function deleteCharDisplay() {
   if (!numCount || clearDisplay) {
     return
@@ -198,10 +201,3 @@ function deleteCharDisplay() {
   displayField.textContent = displayField.textContent.slice(0,-1);
   numCount--;
 }
-
-
-
-// Bugs (All fixed):
-// equal operator spamming ex. 2x2=4=16=64 and so on
-// should be: 2x2=4=8=16=32
-// Fixed with clearDisplay return statement;
