@@ -41,7 +41,7 @@ numbers.forEach((num) => {num.addEventListener('click', display)});
 
 // Display character limit
 let numCount = 0;
-const displayLimit = 10;
+const displayLimit = 11;
 clearDisplay = false;
 
 defaultDisplay();
@@ -122,7 +122,8 @@ const precisionVal = Number(precision.toString().slice(-1));
 const scientificNotationEndChars = 4;
 
 // The result of calculation becomes the first number,
-// in order to calculate the result while clicking the operators
+// so that user is able to calculate the result,
+// while clicking only the operators
 function update() {
   if (clearDisplay || !firstNumber || !operator) {
     return;
@@ -131,8 +132,8 @@ function update() {
   secondNumber = Number(displayField.textContent);
   firstNumber = format(operate(firstNumber, secondNumber, operator));
   
-  // Limit number to fit to display
-  if (firstNumber > Number("1e" + (displayLimit - precisionVal))) {
+  // Convert number to scientific notation, prevents display overflow
+  if (Math.abs(firstNumber) > Number("1e" + (displayLimit - precisionVal))) {
     displayField.textContent = 
       firstNumber.toExponential(displayLimit - scientificNotationEndChars);
   } else {
@@ -180,7 +181,7 @@ function displaySign() {
 }
 
 
-// Bugs:
+// Bugs (All fixed):
 // equal operator spamming ex. 2x2=4=16=64 and so on
 // should be: 2x2=4=8=16=32
 // Fixed with clearDisplay return statement;
