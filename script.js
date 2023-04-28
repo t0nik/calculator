@@ -137,6 +137,10 @@ function update() {
   } else {
     displayField.textContent = firstNumber;
   }
+
+  if (isNaN(firstNumber)) {
+    displayField.textContent = "Division by 0";
+  }
   clearDisplay = true;
 }
 
