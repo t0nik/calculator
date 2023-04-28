@@ -180,6 +180,26 @@ function displaySign() {
   }
 }
 
+const del = document.querySelector(".delete");
+
+del.addEventListener('click', deleteCharDisplay)
+
+function deleteCharDisplay() {
+  if (!numCount || clearDisplay) {
+    return
+  } else if (numCount === 1) {
+    displayField.textContent = 0;
+    clearDisplay = true;
+    return
+  } else if (displayField.textContent.slice(-1) === ".") {
+    displayField.textContent = displayField.textContent.slice(0,-1);
+    return;
+  }
+  displayField.textContent = displayField.textContent.slice(0,-1);
+  numCount--;
+}
+
+
 
 // Bugs (All fixed):
 // equal operator spamming ex. 2x2=4=16=64 and so on
