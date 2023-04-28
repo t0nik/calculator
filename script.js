@@ -41,7 +41,7 @@ numbers.forEach((num) => {num.addEventListener('click', display)});
 
 // Display character limit
 let numCount = 0;
-const displayLimit = 11;
+const displayLimit = 10;
 clearDisplay = false;
 
 defaultDisplay();
@@ -152,19 +152,30 @@ function format(number) {
   return Math.round(number * epsilon) / epsilon;
 }
 
-const dot = document.querySelector(".special.dot");
+const dot = document.querySelector(".dot");
 
-dot.addEventListener('click', getDecimal)
+dot.addEventListener('click', displayDecimal)
 
 // Adds a decimal point when there isn't any other
-function getDecimal() {
+function displayDecimal() {
   if (displayField.textContent.includes(".")) {
     return;
   }
 
   if (numCount < displayLimit) {
     displayField.textContent += ".";
-    ++numCount;
+  }
+}
+
+const sign = document.querySelector(".sign");
+
+sign.addEventListener('click', displaySign)
+
+function displaySign() {
+  if (displayField.textContent.includes("-")) {
+    displayField.textContent = displayField.textContent.slice(1);
+  } else {
+    displayField.textContent = "-" + displayField.textContent;
   }
 }
 
