@@ -152,6 +152,22 @@ function format(number) {
   return Math.round(number * epsilon) / epsilon;
 }
 
+const dot = document.querySelector(".special.dot");
+
+dot.addEventListener('click', getDecimal)
+
+// Adds a decimal point when there isn't any other
+function getDecimal() {
+  if (displayField.textContent.includes(".")) {
+    return;
+  }
+
+  if (numCount < displayLimit) {
+    displayField.textContent += ".";
+    ++numCount;
+  }
+}
+
 
 // Bugs:
 // equal operator spamming ex. 2x2=4=16=64 and so on
