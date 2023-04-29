@@ -49,9 +49,11 @@ function defaultDisplay() {
 }
 
 const numbers = document.querySelectorAll(".number");
-numbers.forEach((num) => {num.addEventListener('click', (event) => {
-  display(event.target.textContent);
-  })});
+numbers.forEach((num) => {
+  num.addEventListener('click', (event) => {
+    display(event.target.textContent);
+  })
+});
 
 
 // Allows user to input numbers,
@@ -66,11 +68,11 @@ function display(number) {
   if (firstZeroPress) {
     if (displayField.textContent.includes(".")) {
       clearDisplay = false;
-    } else if (displayField.textContent === "0"){
+    } else if (displayField.textContent === "0") {
       return;
     }
   }
-  
+
   //!displayField.textContent.includes(".")
 
   if (clearDisplay) {
@@ -103,9 +105,11 @@ function clearAll() {
 
 const operators = document.querySelectorAll(".operator")
 
-operators.forEach((op) => {op.addEventListener('click', (event) => {
-  store(event.target.textContent);
-})});
+operators.forEach((op) => {
+  op.addEventListener('click', (event) => {
+    store(event.target.textContent);
+  })
+});
 
 // Storing a number and clearing the display,
 // so that the next one can be entered,
@@ -148,10 +152,10 @@ function update() {
 
   secondNumber = Number(displayField.textContent);
   firstNumber = format(operate(firstNumber, secondNumber, currentOperator));
-  
+
   // Convert number to scientific notation, prevents display overflow
   if (Math.abs(firstNumber) > Number("1e" + (displayLimit - precisionVal))) {
-    displayField.textContent = 
+    displayField.textContent =
       firstNumber.toExponential(displayLimit - scientificNotationEndChars);
   } else {
     displayField.textContent = firstNumber;
@@ -231,10 +235,10 @@ function deleteCharDisplay() {
     clearDisplay = true;
     return
   } else if (displayField.textContent.slice(-1) === ".") {
-    displayField.textContent = displayField.textContent.slice(0,-1);
+    displayField.textContent = displayField.textContent.slice(0, -1);
     return;
   }
-  displayField.textContent = displayField.textContent.slice(0,-1);
+  displayField.textContent = displayField.textContent.slice(0, -1);
   numCount--;
 }
 
@@ -255,7 +259,7 @@ document.addEventListener('keydown', (event) => {
   } else if (operatorString.indexOf(event.key) !== -1) {
     operators.forEach((op) => {
       if (op.textContent == "x") {
-        operatorKeyboard = operatorString.slice(-2,-1);
+        operatorKeyboard = operatorString.slice(-2, -1);
       } else if (op.textContent == "÷") {
         operatorKeyboard = operatorString.slice(-1);
       } else {
@@ -266,8 +270,8 @@ document.addEventListener('keydown', (event) => {
         store(op.textContent);
       }
     });
-    if (event.code === "Slash") {event.preventDefault()};
-  } else if (event.code === "Equal" || event.code === "Enter"  && !event.shiftKey) {
+    if (event.code === "Slash") { event.preventDefault() };
+  } else if (event.code === "Equal" || event.code === "Enter" && !event.shiftKey) {
     update();
     equals.style.backgroundColor = "#00755e";
     if (event.code === "Enter") event.preventDefault();
@@ -292,8 +296,6 @@ document.addEventListener('keydown', (event) => {
 // Reverting the background color when pressed, improves visibility and UX
 // This handles shift key differently than keydown
 document.addEventListener('keyup', (event) => {
-  console.log(event);
-
   const operatorString = "+-*/";
   let operatorKeyboard = "";
   const equalsString = "=Enter";
@@ -304,28 +306,29 @@ document.addEventListener('keyup', (event) => {
         num.style.backgroundColor = "";
       }
     });
-  } else if ((operatorString.indexOf(event.key) !== -1) || event.key === "Shift") {
+  }
+  if ((operatorString.indexOf(event.key) !== -1) || event.key === "Shift" || event.code === "Digit8") {
     operators.forEach((op) => {
       if (op.textContent == "x") {
-        operatorKeyboard = operatorString.slice(-2,-1);
-      if (event.code === "Digit8") {op.style.backgroundColor = "#908aff"};
+        operatorKeyboard = operatorString.slice(-2, -1);
+        if (event.code === "Digit8" || event.key === "Shift") {op.style.backgroundColor = "" };
       } else if (op.textContent == "÷") {
         operatorKeyboard = operatorString.slice(-1);
-      if (event.code === "Slash") {op.style.backgroundColor = "#908aff"};
+        if (event.code === "Slash") { op.style.backgroundColor = "" };
       } else if (op.textContent == "+") {
-        operatorKeyboard = operatorString.slice(0,1);
-        if (event.code === "Equal") {op.style.backgroundColor = "#908aff"};
+        operatorKeyboard = operatorString.slice(0, 1);
+        if (event.code === "Equal" || event.key === "Shift") { op.style.backgroundColor = "" };
       } else {
         operatorKeyboard = operatorString.slice(1, 2);
-        if (event.code === "Minus") {op.style.backgroundColor = "#908aff"};
+        if (event.code === "Minus") { op.style.backgroundColor = "" };
       }
       if (event.key == operatorKeyboard) {
         op.style.backgroundColor = "";
         store(op.textContent);
       }
     });
-    if (event.code === "Slash") {event.preventDefault()};
-  } else if (event.code === "Equal" || event.code === "Enter"  && !event.shiftKey) {
+    if (event.code === "Slash") { event.preventDefault() };
+  } else if (event.code === "Equal" || event.code === "Enter" && !event.shiftKey) {
     equals.style.backgroundColor = "";
     if (event.code === "Enter") event.preventDefault();
   } else if (event.code === "Period") {
