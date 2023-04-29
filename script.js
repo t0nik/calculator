@@ -301,7 +301,7 @@ document.addEventListener('keyup', (event) => {
   if (event.code.startsWith("Digit")) {
     numbers.forEach((num) => {
       if (event.code.slice(-1) == num.textContent) {
-        num.style.backgroundColor = "#e9e9ed";
+        num.style.backgroundColor = "";
       }
     });
   } else if ((operatorString.indexOf(event.key) !== -1) || event.key === "Shift") {
@@ -320,23 +320,23 @@ document.addEventListener('keyup', (event) => {
         if (event.code === "Minus") {op.style.backgroundColor = "#908aff"};
       }
       if (event.key == operatorKeyboard) {
-        op.style.backgroundColor = "#908aff";
+        op.style.backgroundColor = "";
         store(op.textContent);
       }
     });
     if (event.code === "Slash") {event.preventDefault()};
   } else if (event.code === "Equal" || event.code === "Enter"  && !event.shiftKey) {
-    equals.style.backgroundColor = "#00c39d";
+    equals.style.backgroundColor = "";
     if (event.code === "Enter") event.preventDefault();
   } else if (event.code === "Period") {
-    dot.style.backgroundColor = "#00c39d";
+    dot.style.backgroundColor = "";
   } else if (event.code === "Backspace") {
-    del.style.backgroundColor = "#00c39d";
+    del.style.backgroundColor = "";
   } else if (event.code === "Delete") {
-    clearButton.style.backgroundColor = "#f48225";
+    clearButton.style.backgroundColor = "";
   }
 
   if (event.code === "Minus" || event.key === "Shift") {
-    sign.style.backgroundColor = "#00c39d";
+    sign.style.backgroundColor = "";
   }
 });
