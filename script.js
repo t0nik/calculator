@@ -19,7 +19,7 @@ function divide(a, b) {
 
 let firstNumber = 0;
 let secondNumber = 0;
-let operator = "";
+let currentOperator = "";
 
 function operate(first, second, operator) {
   switch (operator) {
@@ -34,10 +34,7 @@ function operate(first, second, operator) {
   }
 }
 
-const numbers = document.querySelectorAll(".number");
 const displayField = document.querySelector(".display");
-
-numbers.forEach((num) => {num.addEventListener('click', display)});
 
 // Display character limit
 let numCount = 0;
@@ -51,18 +48,38 @@ function defaultDisplay() {
   clearDisplay = true;
 }
 
+const numbers = document.querySelectorAll(".number");
+numbers.forEach((num) => {num.addEventListener('click', (event) => {
+  display(event.target.textContent);
+  })});
+
+
 // Allows user to input numbers,
 // clears the display after the operator is clicked for readability
-function display(numberClick) {
+function display(number) {
   if (isNaN(firstNumber)) {
     return;
   }
+
+  const firstZeroPress = (clearDisplay && number == "0")
+
+  if (firstZeroPress) {
+    if (displayField.textContent.includes(".")) {
+      clearDisplay = false;
+    } else if (displayField.textContent === "0"){
+      return;
+    }
+  }
+  
+  //!displayField.textContent.includes(".")
+
   if (clearDisplay) {
-    clear();  
+    clear();
     clearDisplay = false;
   }
-  if (numCount < displayLimit) {
-    displayField.textContent += numberClick.target.textContent;
+
+  if ((numCount < displayLimit)) {
+    displayField.textContent += number;
     ++numCount;
   }
 }
@@ -79,37 +96,35 @@ function clear() {
 function clearAll() {
   clear();
   firstNumber = 0;
-  operator = "";
+  currentOperator = "";
   secondNumber = 0;
   defaultDisplay();
 }
 
 const operators = document.querySelectorAll(".operator")
 
-operators.forEach((op) => {op.addEventListener('click', store)});
-
-function getOperator(operatorClick) {
-  operator = operatorClick.target.textContent;
-}
+operators.forEach((op) => {op.addEventListener('click', (event) => {
+  store(event.target.textContent);
+})});
 
 // Storing a number and clearing the display,
 // so that the next one can be entered,
 // while remembering previous calculations
-function store(operatorClick) {
+function store(operator) {
   // Second number isn't entered, update the operator
   if (clearDisplay) {
-    getOperator(operatorClick);
+    currentOperator = operator;
     return;
   }
   // If previous values were stored update until cleared.
-  if (firstNumber && operator) {
+  if (firstNumber && currentOperator) {
     update();
   } else {
     firstNumber = Number(displayField.textContent);
   }
 
-  // Store the operator for the next update
-  getOperator(operatorClick);
+  // Store the operator after the update
+  currentOperator = operator;
   clearDisplay = true;
 }
 
@@ -125,12 +140,14 @@ const scientificNotationEndChars = 4;
 // so that user is able to calculate the result,
 // while clicking only the operators
 function update() {
-  if (clearDisplay || !firstNumber || !operator) {
+  // This happens when equal button is pressed without
+  // a stored operator
+  if (clearDisplay || !currentOperator) {
     return;
   }
 
   secondNumber = Number(displayField.textContent);
-  firstNumber = format(operate(firstNumber, secondNumber, operator));
+  firstNumber = format(operate(firstNumber, secondNumber, currentOperator));
   
   // Convert number to scientific notation, prevents display overflow
   if (Math.abs(firstNumber) > Number("1e" + (displayLimit - precisionVal))) {
@@ -143,7 +160,9 @@ function update() {
   if (isNaN(firstNumber)) {
     displayField.textContent = "Division by 0";
   }
-  operator = "";
+
+  // Reset the operator so that the first number could be stored
+  currentOperator = "";
   clearDisplay = true;
 }
 
@@ -175,10 +194,10 @@ function displayDecimal() {
 
 const sign = document.querySelector(".sign");
 
-sign.addEventListener('click', displaySign)
+sign.addEventListener('click', displayNegate)
 
 // Negates the number
-function displaySign() {
+function displayNegate() {
   if (displayField.textContent.includes("-")) {
     displayField.textContent = displayField.textContent.slice(1);
   } else {
@@ -188,7 +207,7 @@ function displaySign() {
   // Change the sign of the result
   // When operator is pressed treat negation as the second number 
   // (this functionality is the same as the ms windows calculator)
-  if (!operator) {
+  if (!currentOperator) {
     firstNumber = -firstNumber;
   } else {
     clearDisplay = false;
@@ -216,4 +235,34 @@ function deleteCharDisplay() {
   numCount--;
 }
 
-// Left to add: Keyboard support
+// Keyboard support
+document.addEventListener('keydown', (event) => {
+  const operators = "+-*/";
+  const equals = "=Enter";
+
+  if (event.code.startsWith("Digit") && !event.shiftKey) {
+    display(event.key);
+    numbers.forEach((num) => {
+      if (event.key == num) {
+        num.add('press');
+      }
+    })
+  } else if (operators.indexOf(event.key) !== -1) {
+    store(event.key);
+    if (event.code === "Slash") {event.preventDefault()};
+  } else if (equals.indexOf(event.key) !== -1) {
+    update();
+    if (event.code === "Enter") event.preventDefault();
+  } else if (event.code === "Period") {
+    displayDecimal();
+  } else if (event.code === "Minus" && event.shiftKey) {
+    displayNegate();
+  } else if (event.code === "Backspace") {
+    deleteCharDisplay();
+  } else if (event.code === "Delete") {
+    clearAll();
+  }
+  if (event.key !== "Shift") {
+  console.log(event);
+  }
+});
