@@ -198,6 +198,9 @@ sign.addEventListener('click', displayNegate)
 
 // Negates the number
 function displayNegate() {
+  if (displayField.textContent === "0") {
+    return;
+  }
   if (displayField.textContent.includes("-")) {
     displayField.textContent = displayField.textContent.slice(1);
   } else {
@@ -311,7 +314,7 @@ document.addEventListener('keyup', (event) => {
       if (event.code === "Slash") {op.style.backgroundColor = "#908aff"};
       } else if (op.textContent == "+") {
         operatorKeyboard = operatorString.slice(0,1);
-        if (event.key === "Shift") {op.style.backgroundColor = "#908aff"};
+        if (event.code === "Equal") {op.style.backgroundColor = "#908aff"};
       } else {
         operatorKeyboard = operatorString.slice(1, 2);
         if (event.code === "Minus") {op.style.backgroundColor = "#908aff"};
@@ -327,11 +330,13 @@ document.addEventListener('keyup', (event) => {
     if (event.code === "Enter") event.preventDefault();
   } else if (event.code === "Period") {
     dot.style.backgroundColor = "#00c39d";
-  } else if (event.code === "Minus") {
-    sign.style.backgroundColor = "#00c39d";
   } else if (event.code === "Backspace") {
     del.style.backgroundColor = "#00c39d";
   } else if (event.code === "Delete") {
     clearButton.style.backgroundColor = "#f48225";
+  }
+
+  if (event.code === "Minus" || event.key === "Shift") {
+    sign.style.backgroundColor = "#00c39d";
   }
 });
