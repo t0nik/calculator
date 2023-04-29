@@ -85,8 +85,8 @@ function display(number) {
 }
 
 
-const clearField = document.querySelector(".clear");
-clearField.addEventListener('click', clearAll);
+const clearButton = document.querySelector(".clear");
+clearButton.addEventListener('click', clearAll);
 
 function clear() {
   displayField.textContent = "";
@@ -236,33 +236,102 @@ function deleteCharDisplay() {
 }
 
 // Keyboard support
+// Changing background color when pressed, improves visibility and UX
 document.addEventListener('keydown', (event) => {
-  const operators = "+-*/";
-  const equals = "=Enter";
+  const operatorString = "+-*/";
+  let operatorKeyboard = "";
+  const equalsString = "=Enter";
 
   if (event.code.startsWith("Digit") && !event.shiftKey) {
     display(event.key);
     numbers.forEach((num) => {
-      if (event.key == num) {
-        num.add('press');
+      if (event.key == num.textContent) {
+        num.style.backgroundColor = "#b1b1b9";
       }
-    })
-  } else if (operators.indexOf(event.key) !== -1) {
-    store(event.key);
+    });
+  } else if (operatorString.indexOf(event.key) !== -1) {
+    operators.forEach((op) => {
+      if (op.textContent == "x") {
+        operatorKeyboard = operatorString.slice(-2,-1);
+      } else if (op.textContent == "÷") {
+        operatorKeyboard = operatorString.slice(-1);
+      } else {
+        operatorKeyboard = op.textContent;
+      };
+      if (event.key == operatorKeyboard) {
+        op.style.backgroundColor = "#565399";
+        store(op.textContent);
+      }
+    });
     if (event.code === "Slash") {event.preventDefault()};
-  } else if (equals.indexOf(event.key) !== -1) {
+  } else if (event.code === "Equal" || event.code === "Enter"  && !event.shiftKey) {
     update();
+    equals.style.backgroundColor = "#00755e";
     if (event.code === "Enter") event.preventDefault();
   } else if (event.code === "Period") {
     displayDecimal();
+    dot.style.backgroundColor = "#00755e";
   } else if (event.code === "Minus" && event.shiftKey) {
     displayNegate();
+    sign.style.backgroundColor = "#00755e";
   } else if (event.code === "Backspace") {
     deleteCharDisplay();
+    del.style.backgroundColor = "#fac192";
   } else if (event.code === "Delete") {
     clearAll();
+    clearButton.style.backgroundColor = "#fac192";
   }
-  if (event.key !== "Shift") {
+  // if (event.key !== "Shift") {
+  // console.log(event);
+  // }
+});
+
+// Reverting the background color when pressed, improves visibility and UX
+// This handles shift key differently than keydown
+document.addEventListener('keyup', (event) => {
   console.log(event);
+
+  const operatorString = "+-*/";
+  let operatorKeyboard = "";
+  const equalsString = "=Enter";
+
+  if (event.code.startsWith("Digit")) {
+    numbers.forEach((num) => {
+      if (event.code.slice(-1) == num.textContent) {
+        num.style.backgroundColor = "#e9e9ed";
+      }
+    });
+  } else if ((operatorString.indexOf(event.key) !== -1) || event.key === "Shift") {
+    operators.forEach((op) => {
+      if (op.textContent == "x") {
+        operatorKeyboard = operatorString.slice(-2,-1);
+      if (event.code === "Digit8") {op.style.backgroundColor = "#908aff"};
+      } else if (op.textContent == "÷") {
+        operatorKeyboard = operatorString.slice(-1);
+      if (event.code === "Slash") {op.style.backgroundColor = "#908aff"};
+      } else if (op.textContent == "+") {
+        operatorKeyboard = operatorString.slice(0,1);
+        if (event.key === "Shift") {op.style.backgroundColor = "#908aff"};
+      } else {
+        operatorKeyboard = operatorString.slice(1, 2);
+        if (event.code === "Minus") {op.style.backgroundColor = "#908aff"};
+      }
+      if (event.key == operatorKeyboard) {
+        op.style.backgroundColor = "#908aff";
+        store(op.textContent);
+      }
+    });
+    if (event.code === "Slash") {event.preventDefault()};
+  } else if (event.code === "Equal" || event.code === "Enter"  && !event.shiftKey) {
+    equals.style.backgroundColor = "#00c39d";
+    if (event.code === "Enter") event.preventDefault();
+  } else if (event.code === "Period") {
+    dot.style.backgroundColor = "#00c39d";
+  } else if (event.code === "Minus") {
+    sign.style.backgroundColor = "#00c39d";
+  } else if (event.code === "Backspace") {
+    del.style.backgroundColor = "#00c39d";
+  } else if (event.code === "Delete") {
+    clearButton.style.backgroundColor = "#f48225";
   }
 });
